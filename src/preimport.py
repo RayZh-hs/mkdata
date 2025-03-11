@@ -16,11 +16,17 @@ def expand(matched):
         str+=chr(c)
     return str
 
-def rstr(chars,len):
-    chars = re.sub("(.)-(.)",expand,chars)
-    str = ""
-    for i in range(len):
-        str+=random.choice(chars)
+def rstr(chars:str, len:int):
+    string = ""
+    real_chars = ""
+    if chars.find("\\-") != -1:
+        real_chars += "-"
+        chars = chars.replace("\\-", "")
 
-    return str
+    real_chars += re.sub("(.)-(.)", expand, chars)
+    
+    for i in range(len):
+        string+=random.choice(real_chars)
+
+    return string
 
