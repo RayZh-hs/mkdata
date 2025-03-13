@@ -19,7 +19,6 @@ def main():
     parser = argparse.ArgumentParser(description="MkData")
     parser.add_argument("--version", "-v", action="version", version=f"%(prog)s {__version__}")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
-    parser.add_argument("--output", "-o", type=str, help="Redirect output to file")
     parser.add_argument("--input", "-i", type=str, help="Read config from file")
     args = parser.parse_args()
     
@@ -46,15 +45,8 @@ def main():
         logging.debug(f"Completed script file: {repr(config)}")
     
     # Use the script to construct and launch the mkdata interpreter
-    if args.output:
-        os.mkdir(os.path.dirname(args.output), exist_ok=True)
-        with open(args.output, "w") as f:
-            with contextlib.redirect_stdout(f):
-                interpreter = Interpreter(config)
-                interpreter.run()
-    else:
-        interpreter = Interpreter(config)
-        interpreter.run()
+    interpreter = Interpreter(config)
+    interpreter.run()
 
 
 if __name__ == "__main__":
