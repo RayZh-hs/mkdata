@@ -1,0 +1,61 @@
+#!/usr/bin/env python3
+
+"""
+MkData
+
+This is the entrypoint for the mkdata project.
+"""
+
+import argparse
+import logging
+import os, sys
+import contextlib
+from interpreter import Interpreter
+
+__version__ = "0.2.1"
+__authors__ = ["RayZh-hs", "rogerflowey"]
+
+def main():
+    parser = argparse.ArgumentParser(description="MkData")
+    parser.add_argument("--version", "-v", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
+    parser.add_argument("--output", "-o", type=str, help="Redirect output to file")
+    parser.add_argument("--input", "-i", type=str, help="Read config from file")
+    args = parser.parse_args()
+    
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+    if args.input:
+        logging.info(f"Reading the script from {args.input}")
+        if os.path.exists(args.input):
+            with open(args.input, "r") as f:
+                config = f.read()
+                logging.debug(f"Read the script: {repr(config)}")
+        else:
+            logging.error(f"Script file {args.input} not found")
+            return
+    else:
+        # The config is read from stdin
+        logging.debug("Reading the script from stdin")
+        config = ""
+        for line in sys.stdin:
+            config += line
+            logging.debug(f"Updated script file: {repr(config)}")
+        logging.debug(f"Completed script file: {repr(config)}")
+    
+    # Use the script to construct and launch the mkdata interpreter
+    if args.output:
+        os.mkdir(os.path.dirname(args.output), exist_ok=True)
+        with open(args.output, "w") as f:
+            with contextlib.redirect_stdout(f):
+                interpreter = Interpreter(config)
+                interpreter.run()
+    else:
+        interpreter = Interpreter(config)
+        interpreter.run()
+
+
+if __name__ == "__main__":
+    main()
