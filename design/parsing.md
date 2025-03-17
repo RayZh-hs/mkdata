@@ -43,9 +43,9 @@ graph LR;
     Sentence[Sentence]
     CodeBlock[CodeBlock]
     Syntax[Syntax]
-    Sentence -->|consists| CodeBlock
+    Sentence -->|constitutes| CodeBlock
     CodeBlock -->|constructs| Syntax
-    Syntax -->|consists| CodeBlock
+    Syntax -->|constitutes| CodeBlock
 ```
 
 4. After the compiling phase, the instance of the `SyntaxRun` class becomes the starting point of the execution chain, and the `execute()` function on it. Recursively, all the `execute()` functions are called on the execution chain, and the script is executed. The results are immediately printed to the specified output stream. In this process, the environment defined within _env.py constantly changes to mirror the context of the script.
