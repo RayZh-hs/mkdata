@@ -12,11 +12,11 @@ import os
 import sys
 from interpreter import Interpreter
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __authors__ = ["RayZh-hs", "rogerflowey"]
 
 def main():
-    parser = argparse.ArgumentParser(description="MkData")
+    parser = argparse.ArgumentParser(description="MkData: Simple but powerful batch data generator based on Python.")
     parser.add_argument("--version", "-v", action="version", version=f"%(prog)s {__version__}")
     parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
     parser.add_argument("--input", "-i", type=str, help="Read config from file")
