@@ -17,11 +17,11 @@ from functools import partial
 from random import choices
 
 from _base import Syntax
+from _env import env
 
 from execute import evaluate_python_expression
 from parser import ParsedSyntaxBlock
 from code_block import CodeBlockGen, CodeBlockPython
-from environment import env
 
 
 class SyntaxRun(Syntax):

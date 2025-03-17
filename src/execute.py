@@ -1,5 +1,6 @@
 import re
-from environment import env
+
+from _env import env
 
 
 def execute_sentence(sentence: str):

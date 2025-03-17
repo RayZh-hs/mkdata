@@ -8,9 +8,9 @@ Code blocks are constructed by and exposed to the user as syntaxes, which can be
 """
 
 from _base import Syntax, CodeBlock
+from _env import env
 from parser import identify_syntax_in_line, parse_syntax_block
 from sentence import Sentence
-from environment import env
 
 
 class CodeBlockGen(CodeBlock):
