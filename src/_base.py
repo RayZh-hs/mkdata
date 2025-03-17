@@ -26,7 +26,7 @@ class Syntax(abc.ABC):
     block_count = 1
 
     def __init__(self, script: ParsedSyntaxBlock):
-        assert(script.id == self.identifier)
+        assert(script.identity == self.identifier)
         if not match_counts(len(script.blocks), self.block_count):
             raise SyntaxError(f"Syntax {self.identifier} should be followed by block count {self.block_count}, but got {len(script.blocks)}")
 
