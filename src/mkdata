@@ -8,8 +8,8 @@ This is the entrypoint for the mkdata project.
 
 import argparse
 import logging
-import os, sys
-import contextlib
+import os
+import sys
 from interpreter import Interpreter
 
 __version__ = "0.2.1"

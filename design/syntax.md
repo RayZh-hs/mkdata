@@ -4,12 +4,12 @@ This file contains the design for the new syntax used in the mkdata project.
 
 ## Scope
 
-In every .mkd file, @run defines a script scope, where the interpreter parses data within. Every .mkd file should only have one @run block.
+In every .mkd file, @run defines a execution scope, where the interpreter parses data within. Every .mkd file should only have one @run block.
 
 ```
 is ignored
 @run {
-    # SCRIPT SCOPE
+    # execution scope
 }
 is ignored
 ```
@@ -58,7 +58,7 @@ Keywords are non-python expressions starting with @. They are used to create fun
 @redirect [path: expr]
 ```
 
-Redirects the output to a file specified by the expression. If path is stdout, then the output is redirected to the standard output (default behavior). This is the only keyword that can be used outside the script scope, and is advised to be used at the beginning of the file.
+Redirects the output to a file specified by the expression. If path is stdout, then the output is redirected to the standard output (default behavior). This is the only keyword that can be used outside the execution scope, and is advised to be used at the beginning of the file.
 
 ### @ run
 
@@ -68,7 +68,7 @@ Redirects the output to a file specified by the expression. If path is stdout, t
 }
 ```
 
-Defines a script scope, and starts the interpreter cycle.
+Defines a execution scope, and starts the interpreter cycle.
 
 It is followed by a single brace block.
 
@@ -82,7 +82,7 @@ It is followed by a single brace block.
 }
 ```
 
-Only available in the script scope, allowing the user to execute a python script block.
+Only available in the execution scope, allowing the user to execute a python script block.
 
 ### @ loop
 
@@ -101,7 +101,6 @@ The same as repeating all that is inside the block for `times` times.
     ...
 }
 ```
-
 Same as @ loop, but creates a variable that updates according to the iteration count.
 
 ### @ any
@@ -121,10 +120,10 @@ Randomly selects one of the blocks to execute, most likely to be used within a l
 
 ```
 @any
-    [chance: expr] {
+    { [chance: expr]
         ...
     }
-    [chance: expr] {
+    { [chance: expr]
         ...
     }
 ```
@@ -133,7 +132,7 @@ ALternatively, specify how likely each block is to be executed. An assertion err
 
 ## Predefined Functions
 
-A set of predefined python functions are available for use in script scope. They aim to provide a simpler interface for the user to generate random data.
+A set of predefined python functions are available for use in execution scope. They aim to provide a simpler interface for the user to generate random data.
 
 ### Pre-imports
 
