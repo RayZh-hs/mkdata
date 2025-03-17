@@ -16,3 +16,19 @@ def match_counts(true_counts: int, counts: int | str):
         return true_counts >= 1
     if counts == "*":
         return true_counts >= 0
+
+
+def remove_comments(code: str) -> str:
+    in_string = False
+    escape = False
+    for i, char in enumerate(code):
+        if char == "#" and not in_string:
+            return code[:i].rstrip()
+        if char in "'\"":
+            if not escape:
+                if in_string == char:
+                    in_string = False
+                elif not in_string:
+                    in_string = char
+        escape = (char == "\\" and not escape)
+    return code.strip()
