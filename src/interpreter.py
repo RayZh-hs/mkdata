@@ -39,6 +39,7 @@ class Interpreter:
                         syntax = SyntaxRedirect(
                             ParsedSyntaxBlock(identity='redirect', args=r_args)
                         )
+                        syntax.execute()
                         continue
                     elif line.startswith("@run"):
                         # this means that the line is a run block
