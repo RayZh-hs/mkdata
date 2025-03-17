@@ -9,10 +9,10 @@ Code blocks are constructed by and exposed to the user as syntaxes, which can be
 
 from typing import List
 
-from _base import Syntax, CodeBlock
-from _env import env
-from parser import identify_syntax_in_line, parse_syntax_block
-from sentence import Sentence
+from mkdata._base import Syntax, CodeBlock
+from mkdata._env import env
+from mkdata.parser import identify_syntax_in_line, parse_syntax_block
+from mkdata.sentence import Sentence
 
 
 class CodeBlockGen(CodeBlock):

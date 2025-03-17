@@ -10,7 +10,8 @@ import argparse
 import logging
 import os
 import sys
-from interpreter import Interpreter
+
+from mkdata.interpreter import Interpreter
 
 __version__ = "0.2.2"
 __authors__ = ["RayZh-hs", "rogerflowey"]

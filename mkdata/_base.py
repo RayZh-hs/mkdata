@@ -1,7 +1,7 @@
 import abc
 
-from _utils import match_counts
-from parser import ParsedSyntaxBlock
+from mkdata._utils import match_counts
+from mkdata.parser import ParsedSyntaxBlock
 
 
 class CodeBlock(abc.ABC):

@@ -10,10 +10,9 @@ and Interpreter.run() is called to execute the script.
 import logging
 import os
 
-from execute import execute_python_block
-
-from syntax import SyntaxRun, SyntaxRedirect
-from parser import parse_syntax_block, ParsedSyntaxBlock
+from mkdata.execute import execute_python_block
+from mkdata.syntax import SyntaxRun, SyntaxRedirect
+from mkdata.parser import parse_syntax_block, ParsedSyntaxBlock
 
 
 class Interpreter:

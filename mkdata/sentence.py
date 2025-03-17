@@ -1,4 +1,4 @@
-from execute import execute_sentence
+from mkdata.execute import execute_sentence
 
 
 class Sentence:

@@ -5,3 +5,5 @@
 .mango
 
 local-tests
+dist
+mkdata.egg-info

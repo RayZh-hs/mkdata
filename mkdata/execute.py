@@ -1,7 +1,7 @@
 import re
 
-from _env import env
-from _utils import remove_comments
+from mkdata._env import env
+from mkdata._utils import remove_comments
 
 
 def execute_sentence(sentence: str):

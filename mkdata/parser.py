@@ -8,10 +8,11 @@ containing the id, args and list of string blocks (list of list of strings), as 
 """
 
 import re
-from _utils import count_indentations
 from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import List
+
+from mkdata._utils import count_indentations
 
 @dataclass
 class ParsedSyntaxBlock:
