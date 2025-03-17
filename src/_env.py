@@ -9,5 +9,5 @@ from functools import partial
 
 env = {
     "context": {},
-    "output": partial(print, end=""),
+    "print": partial(print, end=""),
 }
