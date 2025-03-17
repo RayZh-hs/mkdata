@@ -18,18 +18,17 @@ def execute_sentence(sentence: str):
     var = None
     suffix = " "
     sentence = sentence.strip()
-    context = env["context"]
     out_stream = env["print"]
 
     if sentence == "":
         return
-    # handle comments
-    if "#" in sentence:
-        # remove everything after the comment
-        sentence = sentence[: sentence.index("#")]
-    sentence = sentence.strip()
-    if sentence == "":
-        return
+    # handle comments (this isn't needed)
+    # if "#" in sentence:
+    #     # remove everything after the comment
+    #     sentence = sentence[: sentence.index("#")]
+    # sentence = sentence.strip()
+    # if sentence == "":
+    #     return
     # handle silent mode
     if sentence.startswith("%"):
         silent_mode = True
@@ -48,9 +47,9 @@ def execute_sentence(sentence: str):
         sentence = sentence[: sentence.rindex("\\")]
     # what is left should be a python expression
     try:
-        eval_ret = eval(sentence, context, context)
+        eval_ret = eval(sentence, env["context"], env["context"])
         if var is not None:
-            context[var] = eval_ret
+            env["context"][var] = eval_ret
         if eval_ret is not None and not silent_mode:
             out_stream(str(eval_ret) + suffix)
     except Exception as e:
@@ -83,3 +82,7 @@ def evaluate_python_expression(expression: str):
         return eval(expression, context, context)
     except Exception as e:
         raise SyntaxError(f"Error while evaluating python expression: {e}") from e
+
+
+if __name__ == '__main__':
+    execute_sentence(r"'' \n")
