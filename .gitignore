@@ -6,4 +6,5 @@
 
 local-tests
 dist
+build
 mkdata.egg-info
