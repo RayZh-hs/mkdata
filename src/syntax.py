@@ -144,11 +144,12 @@ class SyntaxLoop(Syntax):
 
     def __init__(self, script: ParsedSyntaxBlock):
         super().__init__(script)
-        self.iterations = evaluate_python_expression(script.args)
+        self.iterations_literal = (script.args)
         self.code_block = CodeBlockGen(script=script.blocks[0])
 
     def execute(self):
-        for _ in range(self.iterations):
+        iterations = evaluate_python_expression(self.iterations_literal)
+        for _ in range(iterations):
             self.code_block.execute()
 
 
