@@ -13,28 +13,28 @@ import sys
 
 from mkdata.interpreter import Interpreter
 
-__version__ = "0.2.6"
+__version__ = "1.0.0"
 __authors__ = ["RayZh-hs", "rogerflowey"]
 
 def main():
     parser = argparse.ArgumentParser(description="MkData: Simple but powerful batch data generator based on Python.")
     parser.add_argument("--version", "-v", action="version", version=f"%(prog)s {__version__}")
-    parser.add_argument("--verbose", action="store_true", help="Enable verbose logging")
-    parser.add_argument("--input", "-i", type=str, help="Read config from file")
+    parser.add_argument("--verbose", action="store_true", help="enable verbose logging")
+    parser.add_argument("script", type=str, help="path to .gen file, use - to read from stdin")
     args = parser.parse_args()
     
     if args.verbose:
         logging.basicConfig(level=logging.DEBUG)
     else:
         logging.basicConfig(level=logging.INFO)
-    if args.input:
-        logging.info(f"Reading the script from {args.input}")
-        if os.path.exists(args.input):
-            with open(args.input, "r") as f:
+    if args.script != '-':
+        logging.info(f"Reading the script from {args.script}")
+        if os.path.exists(args.script):
+            with open(args.script, "r") as f:
                 config = f.read()
                 logging.debug(f"Read the script: {repr(config)}")
         else:
-            logging.error(f"Script file {args.input} not found")
+            logging.error(f"Script file {args.script} not found")
             return
     else:
         # The config is read from stdin

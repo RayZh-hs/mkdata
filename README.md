@@ -30,7 +30,7 @@ cd mkdata
 You can run the following commands to build and install the package:
 
 ```bash
-python setup.py sdist bdist_wheel
+python -m build
 pip install "$(ls dist/mkdata-*-py3-none-any.whl | sort | tail -n 1)"
 ```
 
@@ -41,7 +41,13 @@ The last line scans the `dist` directory and installs the latest wheel package.
 MkData is a command-line tool that creates batch data. When you launch the program without any arguments, it will enter input mode, where you can type in mkdata scripts, and invoke EOF to . More commonly, you would want to run the program with a script file (conventionally *.gen) using the following command:
 
 ```bash
-mkdata -i path/to/script.gen
+mkdata /path/to/gen
+```
+
+If you would like to read from stdin (e.g. piping from another program), you can use the following command:
+
+```bash
+mkdata -
 ```
 
 For detailed usage, run mkdata with the `-h` flag.
