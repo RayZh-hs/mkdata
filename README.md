@@ -101,7 +101,7 @@ These include:
 1. all functions from the `math` module;
 2. the random module;
 3. function rint(a, b) that returns a random integer between a and b (it can be used as r(a, b));
-4. function rstr(chars, n, [weights]) that returns a random string of length n, with characters from chars, and weights as the probability of each character appearing (defaults to uniform);
+4. function rstr(chars, n, [weights]) that returns a random string of length n, with characters from chars, and weights as the probability of each character appearing (defaults to uniform). You can write '[x]-[y]' to specify a range of characters, and use '\\-' to escape the hyphen;
 5. function rfloat(a, b) that returns a random float number between a and b;
 
 You can call them directly in your expressions. You can use \@python to define your own functions and use them at will.
