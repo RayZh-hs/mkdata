@@ -1,3 +1,37 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "mkdata"
+description = "Simple but powerful batch data generator based on Python."
+authors = [
+    { name = "RayZh", email = "rayzhangshanghai@hotmail.com" }
+]
+maintainers = [
+    { name = "RayZh", email = "rayzhangshanghai@hotmail.com" },
+    { name = "rogerflowey", email = "rogerwangabc@163.com" }
+]
+readme = "pypi-info.md"
+license = { text = "MIT" }
+requires-python = ">=3.8"
+dependencies = []
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent"
+]
+dynamic = ["version"]
+
+[project.scripts]
+mkdata = "mkdata.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/RayZh-hs/mkdata"
+
+[tool.setuptools]
+packages = ["mkdata"]
+
+[tool.setuptools.dynamic]
+version = { attr = "mkdata.cli.__version__" }
+readme = { file = "pypi-info.md", content-type = "text/markdown" }
