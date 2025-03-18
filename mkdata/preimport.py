@@ -6,7 +6,7 @@ rint = random.randint
 r = rint
 
 
-def rdouble(a, b):
+def rfloat(a, b):
     return (b - a) * random.random() + a
 
 

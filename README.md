@@ -58,7 +58,7 @@ This will not be interpreted!
 @run {
   # the interpreter will start interpreting from here
   # this is a comment
-  a: r(100, 200)        # a is assigned a random number between 100 and 200, and printed out with trailing ' '
+  a: r(100, 200)        # a is assigned a random integer between 100 and 200, and printed out with trailing ' '
   b: a ** 2         \n  # b is assigned a squared value of a, and printed out with trailing '\n'
   %c: a + b             # c is assigned a + b, but not printed out
 
@@ -93,6 +93,18 @@ This will not be interpreted!
 
 You can write whatever you want here!
 ```
+
+#### Prebuilt Functions
+
+When the interpreter is launched, an environment is prepared and prebuilt functions are loaded.
+These include:
+1. all functions from the `math` module;
+2. the random module;
+3. function rint(a, b) that returns a random integer between a and b (it can be used as r(a, b));
+4. function rstr(chars, n, [weights]) that returns a random string of length n, with characters from chars, and weights as the probability of each character appearing (defaults to uniform);
+5. function rfloat(a, b) that returns a random float number between a and b;
+
+You can call them directly in your expressions. You can use \@python to define your own functions and use them at will.
 
 #### Sentence
 
