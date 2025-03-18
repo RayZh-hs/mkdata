@@ -1,0 +1,38 @@
+This is a brief overview of the most important functionalities that mkdata provides.
+
+This will not be interpreted!
+
+@run {
+  # the interpreter will start interpreting from here
+  # this is a comment
+  a: r(10, 20)          # a is assigned a random integer between 100 and 200, and printed out with trailing ' '
+  b: a ** 2         \n  # b is assigned a squared value of a, and printed out with trailing '\n'
+  %c: (a + b) % 10 + 1  # c is assigned, but not printed out
+
+  @redirect "walkthrough.in"    # this will redirect the output to walkthrough.in
+  @loop c + 1 {
+    # everything within the loop will be executed c + 1 times
+    rstr('a-z', a)  \n  # a random string of lowercase alphabets of length a
+  }
+  @for i in 10 {                # same as loop, but with i keeping track of the iteration number
+    rstr('+-', i, [2,1])    \n  # a random string of +/- of length i, with +:- = 2:1 (probability)
+  }
+  @python {                     # this is a python block, where you can write python code
+    print("Hello, world!")      # this will print "Hello, world!" to the console
+    def f(x):
+      return x + 2
+  }
+  @redirect stdout      # this will redirect the output back to stdout
+  @loop f(a) {
+    # you can nest syntaxes
+    @any {              # one of the three blocks will be executed
+      rstr('a-z', 5)  \n
+    } {
+      rstr('A-Z', 5)  \n
+    } {
+      rstr('0-9', 5)  \n
+    }
+  }
+}
+
+You can write whatever you want here!
