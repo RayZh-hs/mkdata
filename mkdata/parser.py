@@ -12,7 +12,7 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import List
 
-from mkdata._utils import count_indentations
+from mkdata._utils import count_indentations, remove_comments
 
 @dataclass
 class ParsedSyntaxBlock:
@@ -48,7 +48,7 @@ class ParsedSyntaxBlock:
     @staticmethod
     def _parse_header(line: str) -> tuple[str, bool]:
         """Parses the first line of a block and determines if it has an opening brace."""
-        line = line.rstrip()
+        line = remove_comments(line)
         return (line[:-1], True) if line.endswith("{") else (line, False)
 
     @classmethod

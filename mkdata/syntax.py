@@ -18,6 +18,7 @@ from random import choices
 
 from mkdata._base import Syntax
 from mkdata._env import env
+from mkdata._utils import remove_comments
 
 from mkdata.execute import evaluate_python_expression
 from mkdata.parser import ParsedSyntaxBlock
@@ -72,7 +73,7 @@ class SyntaxRedirect(Syntax):
 
     def __init__(self, script: ParsedSyntaxBlock):
         super().__init__(script)
-        self.where = script.args
+        self.where = remove_comments(script.args)
 
     def execute(self):
         if self.where == "stdout":

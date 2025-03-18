@@ -31,4 +31,4 @@ def remove_comments(code: str) -> str:
                 elif not in_string:
                     in_string = char
         escape = (char == "\\" and not escape)
-    return code.strip()
+    return code.rstrip()
