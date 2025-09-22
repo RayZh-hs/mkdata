@@ -175,14 +175,15 @@ class SyntaxFor(Syntax):
 
     def __init__(self, script: ParsedSyntaxBlock):
         super().__init__(script)
-        self.variable, self.times = script.args.split(" in ")
+        self.variable, self.times = script.args.split(" in ", maxsplit=1)
         self.variable.strip()
         self.times.strip()
         self.code_block = CodeBlockGen(script=script.blocks[0])
 
     def execute(self):
         evaluated_expr = evaluate_python_expression(self.times)
-        for idx in range(evaluated_expr):
+        iterable = range(evaluated_expr) if isinstance(evaluated_expr, int) else evaluated_expr
+        for idx in iterable:
             env["context"][self.variable] = idx
             self.code_block.execute()
 

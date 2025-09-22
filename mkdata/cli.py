@@ -13,7 +13,7 @@ import sys
 
 from mkdata.interpreter import Interpreter
 
-__version__ = "1.1.0"
+__version__ = "1.1.1"
 __authors__ = ["RayZh-hs", "rogerflowey"]
 
 def main():
