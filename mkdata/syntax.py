@@ -167,6 +167,10 @@ class SyntaxFor(Syntax):
     @for [variable] in [expression] {
         [gen code block]
     }
+    
+    @for [index], [variable] in [expression] {
+        [gen code block]
+    }
     ```
     """
 
@@ -175,16 +179,24 @@ class SyntaxFor(Syntax):
 
     def __init__(self, script: ParsedSyntaxBlock):
         super().__init__(script)
-        self.variable, self.times = script.args.split(" in ", maxsplit=1)
-        self.variable.strip()
-        self.times.strip()
+        varSection, self.times = script.args.split(" in ", maxsplit=1)
+        if (',' in varSection):
+            self.index, self.variable = varSection.split(',', maxsplit=1)
+            self.index = self.index.strip()
+        else:
+            self.index = None
+            self.variable = varSection
+        self.variable = self.variable.strip()
+        self.times = self.times.strip()
         self.code_block = CodeBlockGen(script=script.blocks[0])
 
     def execute(self):
         evaluated_expr = evaluate_python_expression(self.times)
         iterable = range(evaluated_expr) if isinstance(evaluated_expr, int) else evaluated_expr
-        for idx in iterable:
-            env["context"][self.variable] = idx
+        for idx, value in enumerate(iterable):
+            if (self.index is not None):
+                env["context"][self.index] = idx
+            env["context"][self.variable] = value
             self.code_block.execute()
 
 

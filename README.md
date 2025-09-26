@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./img/logo.png" alt="mkdata-logo" width="180">
+  <img src="./public/logo.png" alt="mkdata-logo" width="180">
 </div>
 
 # MkData
@@ -176,8 +176,12 @@ The same as repeating all that is inside the block for `times` times.
 @for [variable: expr] in [iterable: expr] {
     ...
 }
+
+@for [index], [variable] in [iterable: expr] {
+    ...
+}
 ```
-Same as @ loop, but creates a variable that iterates through the iterable. For legacy reasons, if the iterable is an integer n, it is treated as range(n).
+Same as @ loop, but creates a variable that iterates through the iterable. For legacy reasons, if the iterable is an integer n, it is treated as range(n). You may specify an index variable to keep track of the iteration count, 0-based.
 
 ### \@any
 
