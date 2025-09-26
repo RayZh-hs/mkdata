@@ -173,11 +173,11 @@ The same as repeating all that is inside the block for `times` times.
 ### \@for
 
 ```
-@for [variable: expr] in [times: expr] {
+@for [variable: expr] in [iterable: expr] {
     ...
 }
 ```
-Same as @ loop, but creates a variable that updates according to the iteration count.
+Same as @ loop, but creates a variable that iterates through the iterable. For legacy reasons, if the iterable is an integer n, it is treated as range(n).
 
 ### \@any
 
