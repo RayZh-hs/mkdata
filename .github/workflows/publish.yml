@@ -11,6 +11,8 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    environment:
+      name: pypi-env
     permissions:
       contents: read
       id-token: write
