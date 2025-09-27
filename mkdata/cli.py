@@ -11,10 +11,8 @@ import logging
 import os
 import sys
 
+from mkdata import __version__
 from mkdata.interpreter import Interpreter
-
-__version__ = "1.1.1"
-__authors__ = ["RayZh-hs", "rogerflowey"]
 
 def main():
     parser = argparse.ArgumentParser(description="MkData: Simple but powerful batch data generator based on Python.")

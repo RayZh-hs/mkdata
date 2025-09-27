@@ -13,12 +13,11 @@ maintainers = [
     { name = "rogerflowey", email = "rogerwangabc@163.com" }
 ]
 readme = "pypi-info.md"
-license = { text = "MIT" }
+license = "MIT"
 requires-python = ">=3.8"
 dependencies = []
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent"
 ]
 dynamic = ["version"]
@@ -33,5 +32,5 @@ Homepage = "https://github.com/RayZh-hs/mkdata"
 packages = ["mkdata"]
 
 [tool.setuptools.dynamic]
-version = { attr = "mkdata.cli.__version__" }
+version = { attr = "mkdata.__version__" }
 readme = { file = "pypi-info.md", content-type = "text/markdown" }
