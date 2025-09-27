@@ -4,208 +4,124 @@
 
 # MkData
 
-Simple but powerful batch data generator based on Python.
+> Simple but powerful batch data generator for deterministic or randomized datasets.
 
----
+## Highlights
+
+- Lean Python DSL for rapid data synthesis.
+- Batch-friendly CLI with stdin streaming and file-based workflows.
+- Extensible via inline Python blocks and a rich prebuilt toolbox (`math`, `random`, `rint`, `rstr`, `rfloat`).
 
 ## Installation
 
-### Method 1: Using pip (preferred)
-
-Use this command system-wide or within virtual environments to install the package:
+### From PyPI
 
 ```bash
 pip install mkdata
 ```
 
-### Method 2: Manual installation
-
-First clone the repository:
+### Using UV
 
 ```bash
-git clone https://github.com/RayZh-hs/mkdata.git
-cd mkdata
+# Assuming you have UV installed, run:
+uv tool install mkdata
 ```
 
-You can run the following commands to build and install the package:
+### From source
+
+1. Clone the repository: `git clone https://github.com/RayZh-hs/mkdata.git && cd mkdata`.
+2. Build a wheel: `python -m build`.
+3. Install the freshest artifact: `pip install "$(ls dist/mkdata-*-py3-none-any.whl | sort | tail -n 1)"`.
+
+## Quick start
+
+Run a generator script (conventionally `*.gen`):
 
 ```bash
-python -m build
-pip install "$(ls dist/mkdata-*-py3-none-any.whl | sort | tail -n 1)"
+mkdata path/to/script.gen
 ```
 
-The last line scans the `dist` directory and installs the latest wheel package.
-
-## Usage
-
-MkData is a command-line tool that creates batch data. When you launch the program without any arguments, it will enter input mode, where you can type in mkdata scripts, and invoke EOF to . More commonly, you would want to run the program with a script file (conventionally *.gen) using the following command:
-
-```bash
-mkdata /path/to/gen
-```
-
-If you would like to read from stdin (e.g. piping from another program), you can use the following command:
+Reading from stdin instead of a file:
 
 ```bash
 mkdata -
 ```
 
-For detailed usage, run mkdata with the `-h` flag.
+You can find examples to run in the `examples/` directory.
 
-### Script Syntax
-
-A .gen script is a text file. \@ is used to invoke a syntax, else each line within \@run is treated as a sentence.
-
-Example script:
+### Minimal example
 
 ```
-This will not be interpreted!
+Save this file to hello.gen
 
 @run {
-  # the interpreter will start interpreting from here
-  # this is a comment
-  a: r(100, 200)        # a is assigned a random integer between 100 and 200, and printed out with trailing ' '
-  b: a ** 2         \n  # b is assigned a squared value of a, and printed out with trailing '\n'
-  %c: a + b             # c is assigned a + b, but not printed out
-
-  @redirect "out.out"   # this will redirect the output to out.out
-  @loop c + 1 {
-    # everything within the loop will be executed c + 1 times
-    rstr('a-z', a)  \n  # a random string of lowercase alphabets of length a
+  n: rint(1, 100) \n        # Random integer between 1 and 100, inclusive
+  @loop n {                 # Repeat n times
+    rint(1, 20)             # By default entries concat with space
   }
-  @for i in 10 {
-    # same as loop, but with i keeping track of the iteration number
-    rstr('+-', i, [2,1])    \n  # a random string of +/- of length i, with +:- = 2:1 (probability)
-  }
-  @python {
-    # this is a python block, where you can write python code
-    print("Hello, world!")      # this will print "Hello, world!" to the console
-    def f(x):
-      return x ** 2
-  }
-  @redirect stdout      # this will redirect the output back to stdout           
-  @loop f(a) {
-    # you can nest syntaxes
-    @any {
-      # one of the three blocks will be executed
-      rstr('a-z', 5)  \n
-    } {
-      rstr('A-Z', 5)  \n
-    } {
-      rstr('0-9', 5)  \n
-    }
-  }
-}
-
-You can write whatever you want here!
-```
-
-#### Prebuilt Functions
-
-When the interpreter is launched, an environment is prepared and prebuilt functions are loaded.
-These include:
-1. all functions from the `math` module;
-2. the random module;
-3. function rint(a, b) that returns a random integer between a and b (it can be used as r(a, b));
-4. function rstr(chars, n, [weights]) that returns a random string of length n, with characters from chars, and weights as the probability of each character appearing (defaults to uniform). You can write '[x]-[y]' to specify a range of characters, and use '\\-' to escape the hyphen;
-5. function rfloat(a, b) that returns a random float number between a and b;
-
-You can call them directly in your expressions. You can use \@python to define your own functions and use them at will.
-
-#### Sentence
-
-The anatomy of a sentence:
-
-```
-(%)(variable: ) expression (\(n)) (comment)
-```
-1. **%** If a line starts with a %, it invokes the hidden mode, where the expression is evaluated, but nothing is outputted. In hidden mode, the suffix (\\(n)) does not work.
-2. **variable** If variable is present, the result of the expression is stored within the variable.
-3. **expression** The expression to be evaluated in python. This must be an eval-able expression.
-4. **\\** Suffix: unless in hidden mode, the suffix is what is appended to the output. By default, ' ' is added. \\ changes the suffix to nothing, and \\n changes the suffix to a newline character.
-5. **comment** A comment is a string that starts with a #. It is ignored by the interpreter.
-
-#### Syntax
-
-### \@redirect
-
-```
-@redirect stdout
-@redirect stderr
-@redirect [path: expr]
-```
-
-Redirects the output to a std stream or file path specified by the expression.
-It is advised to be used at the beginning of the file.
-
-### \@run
-
-```
-@run {
-    ...
+  \n                        # End with newline
 }
 ```
 
-Defines a execution scope, and starts the interpreter cycle.
-
-It is followed by a single brace block.
-
-### \@python
-
-```
-@python {
-    ...
-}
+```bash
+mkdata hello.gen
 ```
 
-Allows the user to execute a python script block.
-
-### \@loop
+You should see the output in `stdout`, eg.
 
 ```
-@loop [times: expr] {
-    ...
-}
+5
+17 3 19 8 4
 ```
 
-The same as repeating all that is inside the block for `times` times.
+A full set of examples is available in the `examples/` directory.
 
-### \@for
+## Language overview
 
-```
-@for [variable: expr] in [iterable: expr] {
-    ...
-}
-
-@for [index], [variable] in [iterable: expr] {
-    ...
-}
-```
-Same as @ loop, but creates a variable that iterates through the iterable. For legacy reasons, if the iterable is an integer n, it is treated as range(n). You may specify an index variable to keep track of the iteration count, 0-based.
-
-### \@any
+### Sentences
 
 ```
-@any {
-    ...
-} {
-    ...
-}
-...
+(%)(variable:) expression (\suffix) (# comment)
 ```
 
-Randomly selects one of the blocks to execute, most likely to be used within a loop to create random scenarios.
+- `%` hides output while still evaluating the expression.
+- `variable` stores the evaluated result in the runtime environment.
+- `expression` must be valid Python.
+- `\` suffix customizes the string appended to the output (`\n` for newline, omit for empty).
 
-```
-@any [chance: int] [chance: int] {
-    ...
-} {
-    ...
-}
-```
+### Directives
 
-ALternatively, specify how likely each block is to be executed, using weights (integers).
+Use `@` to introduce a directive. They can be nested and combined freely.
+
+You must use braces `{ ... }` to denote the scope of a directive. Scopes should follow the Google convention for braces (opening brace on the same line, closing brace on its own line, unless an opening brace follows immediately).
+
+| Directive | Purpose |
+| --- | --- |
+| `@run { ... }` | Defines an execution scope and starts the interpreter loop. |
+| `@python { ... }` | Executes embedded Python for custom helpers. |
+| `@redirect stdout\|stderr\|path` | Redirects output to standard streams or files. |
+| `@loop count { ... }` | Repeats a block `count` times. |
+| `@for target in iterable { ... }` | Iterates with optional index tracking. |
+| `@any { ... } { ... }` | Picks one block at random (weights optional). |
+
+## Development
+
+1. Create a virtual environment and activate it.
+2. Install locally in editable mode: `pip install -e .`.
+3. Install tooling: `pip install pytest`.
+4. Run the test suite: `pytest`.
+
+Formatters, linters, and additional tooling are welcome. See `CONTRIBUTING.md` for coordination tips.
+
+## Project links
+
+- Contribution guide: [`CONTRIBUTING.md`](./CONTRIBUTING.md)
+- Release highlights: [`CHANGELOG.md`](./CHANGELOG.md)
+- License: [`LICENSE`](./LICENSE)
 
 ## Attributions
 
-The [logo](https://www.flaticon.com/free-icons/bar-chart) is designed by apien from Flaticon.
+This project uses the following open source packages:
+- [pytest](https://pytest.org) for end-to-end testing.
+
+The project's [logo](https://www.flaticon.com/free-icons/bar-chart) is designed by apien from Flaticon.
