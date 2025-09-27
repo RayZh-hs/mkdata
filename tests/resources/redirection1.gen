@@ -1,0 +1,8 @@
+@run {
+    @redirect stdout
+    n: 10 \n
+    @for i in n {
+        @redirect f"file{i}"
+        i
+    }
+}

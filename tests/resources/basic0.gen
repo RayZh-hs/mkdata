@@ -1,0 +1,8 @@
+comments
+
+@run {
+    n: rint(1, 10) \n
+    @loop n {
+        rint(1, n)
+    }
+}
