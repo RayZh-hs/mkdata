@@ -1,0 +1,26 @@
+- redirection.gen
+
+MkData supports complex redirection logic. This example showcases how to redirect output to different files and standard streams.
+
+@run {
+    # By default, everything goes to stdout.
+    # @redirect stdout
+    "stdout: " + str(rint(1, 100)) \n
+
+    # You can redirect to stderr (rarely used)
+    @redirect stderr
+    "stderr: " + str(rint(1, 100)) \n
+
+    # More commonly, redirect to files.
+    @redirect "1.in"
+    "file 1: " + str(rint(1, 100)) \n
+
+    # Files can be created programmatically.
+    @for i in range(2, 5) {
+        @redirect f"{i}.in"
+        f"file {i}: " + str(rint(1, 100)) \n
+    }
+}
+
+Example output:
+See the folder for details.

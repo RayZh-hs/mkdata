@@ -1,0 +1,29 @@
+- for.gen
+
+This example shows the different usages of the `@loop` directive.
+
+@run {
+    # For can be used to iterate over any iterable
+    @for i in [1, 5, 3] {
+        i
+    }
+    \n
+
+    # If an integer is provided, it will iterate from 0 to n-1
+    @for i in 3 {
+        i
+    }
+    \n
+
+    # If you need to track the index:
+    @for idx, val in ['a', 'b', 'c'] {
+        f"idx: {idx}, val: {val}"   \n
+    }
+}
+
+Example output:
+1 5 3 
+0 1 2 
+idx: 0, val: a
+idx: 1, val: b
+idx: 2, val: c

@@ -1,0 +1,14 @@
+- loop.gen
+
+This example illustrates how to use the `@loop` directive to repeat a block of code multiple times.
+
+@run {
+    @loop 5 {
+        # rint stands for random integer (inclusive)
+        rint(1, 100)
+    }
+    \n
+}
+
+Example output:
+19 79 97 3 2 

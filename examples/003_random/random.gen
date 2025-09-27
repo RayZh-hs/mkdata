@@ -1,0 +1,25 @@
+- random.gen
+
+This example lists random utilities available by default in mkdata.
+
+@run {
+    # Generate a random integer between 1 and 10 (inclusive)
+    # r is an alias for rint
+    rint(1, 10)
+    r(1, 10)    \n
+
+    # Generate a random float between 0 and 1
+    rfloat(0, 1)   \n
+
+    # Generate a random string
+    rstr(".#", 5) \n            # A string of length 5 with # or . characters
+    rstr("a-z0-9", 8) \n        # A string of length 8 with lowercase letters or digits
+    rstr("01", 16, [3, 1]) \n   # A binary string of length 16 with 75% chance of '0' and 25% chance of '1'
+}
+
+Example output:
+6 6
+0.5947750999342817
+#.##.
+im1m6yv5
+0001001010010011

@@ -1,0 +1,33 @@
+- any.gen
+
+As its name suggests, the `@any` directive picks one of its blocks at random to execute, as you will see in this example.
+
+@run {
+    @loop 10 {
+        @any {              # @any chooses any of its blocks at random
+            "Hello"
+            @any {          # nested @any works too
+                "world"\    # trailing \ removes space
+            } {
+                "mkdata"\
+            }
+            "!"\
+        } {
+            "# random int: "\
+            rint(1, 100)\
+        }
+        \n
+    }
+}
+
+Example output:
+# random int: 34
+# random int: 72
+# random int: 74
+Hello world!
+# random int: 95
+Hello world!
+Hello mkdata!
+Hello mkdata!
+# random int: 55
+Hello world!
