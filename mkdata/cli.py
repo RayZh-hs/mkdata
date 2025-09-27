@@ -26,7 +26,7 @@ def main():
     if args.verbose:
         logging.basicConfig(level=logging.DEBUG)
     else:
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.WARNING)
     if args.script != '-':
         logging.info(f"Reading the script from {args.script}")
         if os.path.exists(args.script):
