@@ -1,6 +1,6 @@
 import random
 from math import *  # type: ignore # noqa: F401,F403
-from typing import List, Optional
+from typing import Any, List, Optional, cast, Protocol, Dict
 
 # Standard random utilities
 
@@ -44,3 +44,33 @@ def rstr(chars: str, length: int, weight: Optional[List[int]] = None) -> str:
             "Weight list must have the same length as the expanded character set."
         )
     return "".join(random.choices(expanded_chars, weights=weight, k=length))
+
+
+# Batch generator utilities
+
+def progressively(iterable: List[Any], id: str = "", noise: Optional[float | tuple[float, float]] = None) -> Any:
+    """Yield elements from the iterable progressively, with optional noise."""
+    # For Pylance type checking
+    class HasIterAttr(Protocol):
+        _iter_dict: Dict[str, int]
+    f = cast(HasIterAttr, progressively)
+    
+    if not hasattr(f, "_iter_dict"):
+        f._iter_dict = dict()
+
+    if id not in f._iter_dict:
+        f._iter_dict[id] = 0
+    else:
+        f._iter_dict[id] += 1
+    
+    val = iterable[f._iter_dict[id]]
+    
+    if noise is not None:
+        val_type = type(val)
+        if val_type not in (int, float):
+            raise ValueError("Noise can only be applied to int or float types.")
+        noise_percent = random.uniform(*noise) if isinstance(noise, tuple) else random.uniform(-noise, 0)
+        val += val * noise_percent * random.random()
+        if val_type is int:
+            val = round(val)
+    return val
