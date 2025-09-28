@@ -9,6 +9,8 @@ and Interpreter.run() is called to execute the script.
 
 import logging
 import os
+import random
+from typing import Optional
 
 from mkdata.execute import execute_python_block
 from mkdata.syntax import SyntaxRun, SyntaxRedirect
@@ -16,10 +18,11 @@ from mkdata.parser import parse_syntax_block, ParsedSyntaxBlock
 
 
 class Interpreter:
-    def __init__(self, raw_script: str):
+    def __init__(self, raw_script: str, seed: Optional[int]):
         super().__init__()
         self.script = raw_script.replace('\t', '  ').split("\n")
         self.preimport_path = os.path.join(os.path.dirname(__file__), "preimport.py")
+        random.seed(seed)
 
     def run(self):
         # Before running the script, execute the preimport.py file

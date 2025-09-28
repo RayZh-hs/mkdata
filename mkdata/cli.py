@@ -18,6 +18,7 @@ def main():
     parser = argparse.ArgumentParser(description="MkData: Simple but powerful batch data generator based on Python.")
     parser.add_argument("--version", "-v", action="version", version=f"%(prog)s {__version__}")
     parser.add_argument("--verbose", action="store_true", help="enable verbose logging")
+    parser.add_argument("-s", "--seed", type=int, help="set random seed for reproducibility")
     parser.add_argument("script", type=str, help="path to .gen file, use - to read from stdin")
     args = parser.parse_args()
     
@@ -44,7 +45,7 @@ def main():
         logging.debug(f"Completed script file: {repr(config)}")
     
     # Use the script to construct and launch the mkdata interpreter
-    interpreter = Interpreter(config)
+    interpreter = Interpreter(config, seed=args.seed)
     interpreter.run()
 
 
