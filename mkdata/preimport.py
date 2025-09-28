@@ -46,24 +46,52 @@ def rstr(chars: str, length: int, weight: Optional[List[int]] = None) -> str:
     return "".join(random.choices(expanded_chars, weights=weight, k=length))
 
 
+# Extended random utilities
+
+def rarray(min: int, max: int, length: int, unique: bool = True):
+    """Generate an array of random integers within a specified range. Defaults to unique values.
+    
+    If 'unique' is True, all integers in the array will be unique.
+    """
+    if unique:
+        if length > (max - min + 1):
+            raise ValueError("Length exceeds the number of unique values in the range.")
+        return random.sample(range(min, max + 1), length)
+    else:
+        return [random.randint(min, max) for _ in range(length)]
+
+
 # Batch generator utilities
 
 def progressively(iterable: List[Any], id: str = "", noise: Optional[float | tuple[float, float]] = None) -> Any:
     """Yield elements from the iterable progressively, with optional noise."""
+    class StaticIteratorObject:
+        def __init__(self, iterable: List[Any]):
+            self.iterable = iterable
+            self.index = 0
+        
+        def incr(self):
+            self.index += 1
+        
+        def get(self):
+            if self.index >= len(self.iterable):
+                raise IndexError("Iterator has reached the end of the iterable.")
+            return self.iterable[self.index]
+    
     # For Pylance type checking
     class HasIterAttr(Protocol):
-        _iter_dict: Dict[str, int]
+        _iter_dict: Dict[str, StaticIteratorObject]
     f = cast(HasIterAttr, progressively)
     
     if not hasattr(f, "_iter_dict"):
         f._iter_dict = dict()
-
-    if id not in f._iter_dict:
-        f._iter_dict[id] = 0
-    else:
-        f._iter_dict[id] += 1
     
-    val = iterable[f._iter_dict[id]]
+    if id not in f._iter_dict:
+        f._iter_dict[id] = StaticIteratorObject(iterable)
+    else:
+        f._iter_dict[id].incr()
+    
+    val = f._iter_dict[id].get()
     
     if noise is not None:
         val_type = type(val)

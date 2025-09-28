@@ -1,0 +1,15 @@
+- unique.gen
+
+This file showcases the usage of the new `rarray` utility function in generating unique values
+
+@run {
+    n: rint(1, 10) \n
+    @loop n {
+        progressively(rarray(1, n, length = n))
+    }
+    \n
+}
+
+Example output:
+5
+5 2 1 4 3 
