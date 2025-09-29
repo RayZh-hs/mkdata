@@ -1,6 +1,6 @@
 import random
 from math import *  # type: ignore # noqa: F401,F403
-from typing import Any, List, Optional, cast, Protocol, Dict
+from typing import Any, List, Optional, Self, Iterator
 
 # Standard random utilities
 
@@ -45,9 +45,6 @@ def rstr(chars: str, length: int, weight: Optional[List[int]] = None) -> str:
         )
     return "".join(random.choices(expanded_chars, weights=weight, k=length))
 
-
-# Extended random utilities
-
 def rarray(min: int, max: int, length: int, unique: bool = True):
     """Generate an array of random integers within a specified range. Defaults to unique values.
     
@@ -61,44 +58,73 @@ def rarray(min: int, max: int, length: int, unique: bool = True):
         return [random.randint(min, max) for _ in range(length)]
 
 
-# Batch generator utilities
+# Extended random utilities
 
-def progressively(iterable: List[Any], id: str = "", noise: Optional[float | tuple[float, float]] = None) -> Any:
-    """Yield elements from the iterable progressively, with optional noise."""
-    class StaticIteratorObject:
-        def __init__(self, iterable: List[Any]):
-            self.iterable = iterable
-            self.index = 0
-        
-        def incr(self):
-            self.index += 1
-        
-        def get(self):
-            if self.index >= len(self.iterable):
-                raise IndexError("Iterator has reached the end of the iterable.")
-            return self.iterable[self.index]
+def noise(value: float, min: float = 0, max: float = 0) -> float:
+    """Add random noise to a given value within the specified min and max bounds."""
+    if min > max:
+        raise ValueError("Minimum noise cannot be greater than maximum noise.")
+    return value + random.uniform(min, max) * value
+
+
+# Generator utilities
+
+class Generator:
+    def __init__(self, generator: Iterator[Any], size: Optional[int] = None):
+        self.iter = iter(generator)
+        self.transforms = []
+        self.size = size
     
-    # For Pylance type checking
-    class HasIterAttr(Protocol):
-        _iter_dict: Dict[str, StaticIteratorObject]
-    f = cast(HasIterAttr, progressively)
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        val = next(self.iter)
+        return self.apply_transforms(val)
+
+    def next(self):
+        val = next(self.iter)
+        return self.apply_transforms(val)
     
-    if not hasattr(f, "_iter_dict"):
-        f._iter_dict = dict()
+    def transform(self, func: Any, *args, **kwargs) -> Self:
+        self.transforms.append((func, args, kwargs))
+        return self
     
-    if id not in f._iter_dict:
-        f._iter_dict[id] = StaticIteratorObject(iterable)
-    else:
-        f._iter_dict[id].incr()
+    def apply_transforms(self, val: Any) -> Any:
+        for func, args, kwargs in self.transforms:
+            val = func(val, *args, **kwargs)
+        return val
+
+    @classmethod
+    def from_list(cls, lst: List[Any]) -> Self:
+        return cls(iter(lst), size=len(lst))
     
-    val = f._iter_dict[id].get()
+    @classmethod # alias for from_list
+    def from_array(cls, arr: List[Any]) -> Self:
+        return cls(iter(arr), size=len(arr))
     
-    if noise is not None:
-        val_type = type(val)
-        if val_type not in (int, float):
-            raise ValueError("Noise can only be applied to int or float types.")
-        noise_percent = random.uniform(*noise) if isinstance(noise, tuple) else random.uniform(-noise, 0)
-        val += val * noise_percent * random.random()
-        if val_type is int:
-            val = round(val)
-    return val
+    @classmethod
+    def from_function(cls, func: Any, *args, **kwargs) -> Self:
+        return cls(iter(func(*args, **kwargs)))
+
+    @classmethod
+    def of_int(cls, min: int, max: int, unique: bool = False) -> Self:
+        if unique:
+            if max - min + 1 <= 0:
+                raise ValueError("Invalid range for unique integers.")
+            return cls(iter(random.sample(range(min, max + 1), max - min + 1)))
+        else:
+            return cls(iter(random.randint(min, max) for _ in iter(int, 1)))
+    
+    @classmethod
+    def of_float(cls, min: float, max: float) -> Self:
+        return cls(iter(random.uniform(min, max) for _ in iter(int, 1)))
+    
+    @classmethod
+    def int_progression(cls, lst: List[int], noise_ratio: float | tuple[float, float] = 0) -> Self:
+        """Preset that generates integers based on a list with optional noise."""
+        if isinstance(noise_ratio, tuple):
+            min_noise, max_noise = noise_ratio
+        else:
+            min_noise, max_noise = -noise_ratio, 0
+        return cls.from_list(lst).transform(noise, min=min_noise, max=max_noise).transform(int)

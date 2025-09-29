@@ -2,29 +2,14 @@
 
 This file illustrates how to use mkdata to achieve batch data generation.
 
-New method:
+New method: Use Generators for concise code.
 @run {
-    @for idx in 10 {
+    # The Generator.int_progression preset creates an int array that optionally attatches noise at runtime
+    % generator: Generator.int_progression([10] * 4 + [1000] * 6, noise_ratio = 0.2)
+    # [generator].size is available on instances which sample from a finite iterator
+    @for idx in generator.size {
         @redirect f"{idx + 1}.in"
-        # Use the builtin `progressively` function to generate batches of increasing size with 20% noise.
-        n: progressively([10] * 4 + [1000] * 6, noise = 0.2) \n # for 40% n < 10; for 100% n < 1000
-        @loop n {
-            rint(1, n)
-        }
-        \n
-    }
-}
-
-Old method:
-# @run {
-    # % hides output while still evaluating the expression.
-    % size: [10] * 4 + [1000] * 6  # for 40% n < 10; for 100% n < 1000
-    @for idx, n in size {
-        # Redirect to corresponding file.
-        @redirect f"{idx + 1}.in"   # idx is 0-based
-
-        # Print out n and on the next line, n random integers in [1, n].
-        n: n - rint(0, int(n * 0.2)) \n  # add 20% noise. outputs n
+        n: generator.next()  \n    # outputs n
         @loop n {
             rint(1, n)
         }

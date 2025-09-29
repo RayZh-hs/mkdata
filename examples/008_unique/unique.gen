@@ -1,11 +1,10 @@
 - unique.gen
 
-This file showcases the usage of the new `rarray` utility function in generating unique values
-
 @run {
     n: rint(1, 10) \n
+    % generator: Generator.of_int(1, n, unique = True)
     @loop n {
-        progressively(rarray(1, n, length = n))
+        generator.next()
     }
     \n
 }
