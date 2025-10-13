@@ -18,7 +18,7 @@ from mkdata.parser import parse_syntax_block, ParsedSyntaxBlock
 
 
 class Interpreter:
-    def __init__(self, raw_script: str, seed: Optional[int]):
+    def __init__(self, raw_script: str, seed: Optional[int] = None):
         super().__init__()
         self.script = raw_script.replace('\t', '  ').split("\n")
         self.preimport_path = os.path.join(os.path.dirname(__file__), "preimport.py")
